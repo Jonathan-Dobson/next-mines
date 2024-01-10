@@ -1,9 +1,13 @@
-import styles from './page.module.css'
+'use server';
 
-export default function Home() {
+export default async function Home() {
+
   return (
-    <main className={styles.main}>
-
-    </main>
+    <div>
+      <main>
+        <h1>Next Mines</h1>
+        <p>Mine sweeper game built with Next.js</p>
+      </main>
+    </div>
   )
 }
