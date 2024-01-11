@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link'
-import User from '../components/Navbar/User'
+import User from './User'
 import { ImSpinner } from "react-icons/im";
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
