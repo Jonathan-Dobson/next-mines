@@ -13,9 +13,9 @@ export default function ControlPanel() {
     if (gameStatus === 'on') {
       setGameOverAlert(false)
     }
-    // if (gameStatus === 'lost') {
-    //   setGameOverAlert(false)
-    // }
+    if (gameStatus === 'lost') {
+      setGameOverAlert(true)
+    }
   }, [gameStatus]
   )
 
