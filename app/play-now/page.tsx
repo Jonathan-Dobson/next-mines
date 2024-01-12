@@ -8,7 +8,6 @@ import '@/components/game/App.css';
 function PlayNow() {
   return (
     <Div App>
-      <h1>Play Now</h1>
       <ControlPanel />
       <Minefield />
     </Div>

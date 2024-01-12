@@ -24,6 +24,12 @@ export default function Navbar() {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      background: 'black',
+      width: '100%',
+      padding: 8
     }}>
       <nav style={{
         display: 'flex',

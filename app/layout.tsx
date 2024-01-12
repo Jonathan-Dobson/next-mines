@@ -23,7 +23,9 @@ export default function RootLayout({
         <NextAuthProvider>
           <GamePlayProvider>
             <Navbar />
-            {children}
+            <main>
+              {children}
+            </main>
           </GamePlayProvider>
         </NextAuthProvider>
       </body>

@@ -195,3 +195,7 @@ a:hover {
   /* text glow effect */
   text-shadow: 0 0 10px #fff;
 }
+
+main {
+  margin-top: 50px;
+}
