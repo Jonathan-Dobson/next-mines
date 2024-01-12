@@ -8,7 +8,6 @@ import { authOptions } from '@/lib/nextAuth'
 export default async function ServerPage() {
   const session = await getServerSession(authOptions)
   const users = await prisma.user.findMany()
-  console.log('/users/list', session);
 
   return (
     <div>

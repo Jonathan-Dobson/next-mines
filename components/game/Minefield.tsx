@@ -7,7 +7,6 @@ export default function Minefield() {
   if (!contextValue) return <div>no context</div>
   const { minefield } = contextValue;
 
-  console.log('print minefield', minefield);
 
   return (
     <div style={{
@@ -18,9 +17,7 @@ export default function Minefield() {
     }}>
       {minefield
         .map((row, rownum) => {
-          // console.log('ROW', rownum);
           return row.map((cell: any, colnum: number) => {
-            // console.log('colnum', colnum, cell);
             return <Cell key={`${rownum.toString()}-${colnum.toString()}`}
               position={{ colnum, rownum }}
               cell={cell}

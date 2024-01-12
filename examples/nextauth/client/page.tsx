@@ -5,7 +5,6 @@ import Link from 'next/link'
 
 export default function ClientPage() {
   const { data: session, status } = useSession()
-  console.log('client', session, status);
 
 
   if (status === 'loading') return (<div>Loading...</div>)

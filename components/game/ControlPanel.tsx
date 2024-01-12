@@ -10,7 +10,6 @@ export default function ControlPanel() {
   const [gameStatus, setGameStatus] = gameStatusHook || []
 
   useEffect(() => {
-    console.log('gameStatus', gameStatus);
     if (gameStatus === 'on') {
       setGameOverAlert(false)
     }

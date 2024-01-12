@@ -29,7 +29,6 @@ export default function Cell({ position, cell: { cellState, hasMine } }: CellPro
 
   const [gameStatus, setGameStatus] = contextValue?.gameStatus
 
-  console.log('gameStatus', gameStatus);
 
   const changeTo: ChangeToType | false = gameStatus !== 'off' && {
     open: { onClick: (() => openIt(position, setGameStatus)) },
@@ -53,7 +52,6 @@ export default function Cell({ position, cell: { cellState, hasMine } }: CellPro
     />
   }
 
-  console.log('cellState', cellState);
 
   return typeof cellState === 'number'
     ? parts.open
