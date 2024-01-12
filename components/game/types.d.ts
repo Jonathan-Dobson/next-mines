@@ -1,19 +1,26 @@
 import { Dispatch, SetStateAction } from 'react';
+import Minefield from './Minefield';
 
 export type UseStateType<T> = Dispatch<SetStateAction<T>>
 
-export type SetMinefieldType = UseStateType<any[]>;
+export type CellStateType = number | 'flag' | 'maybe' | 'exploded' | 'closed'
+export type CellType = {
+  hasMine: boolean,
+  cellState?: CellStateType
+}
+export type MinefieldRowType = CellType[] | null[]
+export type MinefieldType = MinefieldRowType[]
+export type SetMinefieldType = UseStateType<MinefieldType>;
+export type MinefieldHookType = [MinefieldType, SetMinefieldType]
 
 export type GameStatusType = 'on' | 'off' | 'lost' | string
-
-export type GameStatusHookType = [GameStatusType, UseStateType<GameStatusType>]
+export type SetGameStatusType = UseStateType<GameStatusType>;
+export type GameStatusHookType = [GameStatusType, SetGameStatusType]
 
 export type CellPositionType = {
   rownum: number,
   colnum: number
 }
-
-export type CellStateType = number | 'flag' | 'maybe' | 'exploded' | 'closed'
 
 export type ChangeToType = {
   open?: { onClick: () => void },
@@ -33,7 +40,16 @@ export type ContextValueType = {
     size?: [number, UseStateType<number>],
     mines?: [number, UseStateType<number>]
   },
-  minefield: any[],
-  setMinefield?: UseStateType<any[]>,
+  minefield: MinefieldType,
+  setMinefield?: SetMinefieldType,
   [key: string]: any
+}
+
+
+export type CellPropsType = {
+  position: CellPositionType,
+  state: CellStateType,
+  changeTo: ChangeToType,
+  onClick?: () => void | undefined,
+  onRightClick?: () => string | void | undefined,
 }

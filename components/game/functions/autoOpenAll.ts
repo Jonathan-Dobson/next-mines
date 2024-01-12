@@ -2,12 +2,12 @@ import getAdjacentCellPositions from './getAdjacentCellPositions'
 import isWithinLimit from './isWithinLimit'
 import countAdjacent from './countAdjacent'
 import openIt from './cellCommands/openIt';
-import { GameStatusHookType, SetMinefieldType } from '@/components/game/types'
+import { GameStatusHookType, MinefieldType } from '@/components/game/types'
 
 type AutoOpenProps = {
   r: number,
   c: number,
-  minefield: any[],
+  minefield: MinefieldType,
   openIt: any // TODO FIX THIS ANY TYPE
   setGame: GameStatusHookType[1] | undefined
 }
@@ -24,7 +24,7 @@ export default function autoOpenAll(props: AutoOpenProps) {
     getAdjacentCellPositions(r, c)
       .forEach(([r, c]) =>
         isWithinLimit(r, c, minefield) &&
-          minefield[r][c].cellState === 'closed' ?
+          minefield[r][c]?.cellState === 'closed' ?
           openIt({ rownum: r, colnum: c }, setGame) : false
       )
   return mines

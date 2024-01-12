@@ -4,7 +4,10 @@ export default function rightClick(setMinefield: SetMinefieldType, newCellState:
   return function (position: CellPositionType) {
     setMinefield(prev => {
       let next = [...prev]
-      next[position.rownum][position.colnum].cellState = newCellState;
+      let cell = next[position.rownum][position.colnum] || {
+        cellState: 'closed',
+      }
+      cell.cellState = newCellState;
       return next
     })
   }
