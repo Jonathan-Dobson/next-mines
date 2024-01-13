@@ -1,7 +1,6 @@
 import getAdjacentCellPositions from './getAdjacentCellPositions'
 import isWithinLimit from './isWithinLimit'
 import countAdjacent from './countAdjacent'
-import openIt from './cellCommands/openIt';
 import { GameStatusHookType, MinefieldType } from '@/components/game/types'
 
 type AutoOpenProps = {
