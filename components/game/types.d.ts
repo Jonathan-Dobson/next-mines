@@ -22,7 +22,7 @@ export type CellPositionType = {
   colnum: number
 }
 
-export type ChangeToType = {
+export type HandleChangeType = {
   open?: { onClick: () => void },
   flag?: { onRightClick: () => void | undefined | string },
   maybe?: { onRightClick: () => void | undefined | string },
@@ -45,11 +45,3 @@ export type ContextValueType = {
   [key: string]: any
 }
 
-
-export type CellPropsType = {
-  position: CellPositionType,
-  state: CellStateType,
-  changeTo: ChangeToType,
-  onClick?: () => void | undefined,
-  onRightClick?: () => string | void | undefined,
-}
