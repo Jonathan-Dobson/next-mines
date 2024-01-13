@@ -6,7 +6,6 @@ type GenerateMinefieldProps = {
 }
 
 export default function generateMinefield({ size, mines }: GenerateMinefieldProps): MinefieldType {
-
   // Create Minefield
   const rows: MinefieldType = Array.from(
     { length: size }, () => Array.from(

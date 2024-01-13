@@ -6,7 +6,6 @@ import type { ContextValueType, SetMinefieldType, MinefieldHookType, MinefieldTy
 const GAME_SIZE = 10
 const MINE_COUNT = 9
 
-// use game size to create an empty minefield
 const initialMinefield: MinefieldType = [[]]
 
 const initialContext: ContextValueType = {
