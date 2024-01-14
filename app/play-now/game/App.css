@@ -1,0 +1,176 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  user-select: none;
+}
+
+.App {
+  /* background-color: #282c34; */
+  /* min-height: 100vh; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: default;
+  color: red;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+/* Cell */
+.Cell,
+.Cell-Open {
+  background-color: #999;
+  width: 50px;
+  height: 50px;
+  border-radius: 2px;
+  transition: all ease-out 50ms;
+}
+
+.Cell:hover {
+  background-color: #aaa;
+}
+
+.Cell:active {
+  background-color: #bbb;
+  box-shadow: inset 0px 0px 3px black;
+}
+
+.Cell-Open {
+  background-color: #eee;
+}
+
+/* Flag */
+.Flag-Container {
+  display: flex;
+  padding: 4px;
+  justify-content: center;
+  transition: transform linear 50ms;
+  transform: scale(0.8);
+}
+
+.Flag-Container:active {
+  transform: scale(0.74);
+}
+
+.Flag-Pole {
+  background-color: black;
+  width: 4px;
+  height: 42px;
+}
+
+.Flag-Area {
+  display: flex;
+  flex-direction: column;
+}
+
+.Flag-Triangle {
+  margin-top: 1px;
+  border-top: 10px solid transparent;
+  border-left: 26px solid #022;
+  border-bottom: 12px solid transparent;
+}
+
+.Flag-Maybe {
+  padding-left: 12px;
+  margin-top: -10px;
+  font-size: 200%;
+  color: black;
+  font-weight: bolder;
+}
+
+/* Mine */
+.Mine-Container {
+  display: flex;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+}
+
+.Mine-Circle {
+  background-color: black;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.Mine-Spike {
+  background-color: black;
+  border-radius: 4px;
+  position: relative;
+  top: -5px;
+  left: 4px;
+  width: 4px;
+  height: 34px;
+}
+
+.rotate-60 {
+  transform: rotate(60deg);
+  left: 0;
+}
+
+.rotate-120 {
+  transform: rotate(120deg);
+  left: -4px;
+}
+
+.Exploded {
+  background-color: red;
+}
+
+/* More */
+.Cell-Number {
+  display: block;
+  text-align: center;
+  font-size: 270%;
+  color: black;
+  font-weight: bold;
+}
+
+.Footer {
+  color: #eee;
+}
+
+.GameOver {
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 2;
+  padding: 50px;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.GameOverBar {
+  color: orangered;
+  font-size: 130%;
+  background: rgba(0, 0, 255, 0.8);
+  padding: 20px;
+  font-weight: bolder;
+  border-radius: 10px;
+  box-shadow: -3px 10px 36px 14px black;
+}
+
+.GameOverText {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 4vw;
+  position: absolute;
+  text-align: center;
+  z-index: 12;
+  top: 30vh;
+}
+
+.GameOverButton {
+  text-align: center;
+}
+
+.GameOverButton > button {
+  width: 80%;
+}

@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '@/ui/globals.css'
 import Navbar from '@/components/Navbar/Navbar'
-import GamePlayProvider from '@/context/GamePlayProvider'
+import { GameProvider } from '@/context/GameProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,12 +21,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <NextAuthProvider>
-          <GamePlayProvider>
-            <Navbar />
-            <main>
+          <Navbar />
+          <main>
+            <GameProvider>
               {children}
-            </main>
-          </GamePlayProvider>
+            </GameProvider>
+          </main>
         </NextAuthProvider>
       </body>
     </html>

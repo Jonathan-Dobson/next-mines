@@ -4,7 +4,7 @@ import cellCommands from '@/components/game/functions/cellCommands/bundled'
 import type { ContextValueType, SetMinefieldType, MinefieldHookType, MinefieldType } from '@/components/game/types'
 
 const GAME_SIZE = 10
-const MINE_COUNT = 9
+const MINE_COUNT = 3
 
 const initialMinefield: MinefieldType = [[]]
 

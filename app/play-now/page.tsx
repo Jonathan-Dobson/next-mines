@@ -1,14 +1,14 @@
 'use client'
 import React from 'react'
-import Div from '@/components/game/Div'
-import ControlPanel from '@/components/game/ControlPanel'
-import Minefield from '@/components/game/Minefield'
-import '@/components/game/App.css';
+import Div from './game/CellParts/Div'
+import ControlPanel from './game/ControlPanel'
+import Minefield from './game/Minefield'
+import './game/App.css';
 
 function PlayNow() {
   return (
     <Div App>
-      <ControlPanel />
+      {/* <ControlPanel /> */}
       <Minefield />
     </Div>
   )
