@@ -2,6 +2,7 @@
 import { createContext, useReducer } from 'react';
 import reducer from '@/app/play-now/game/reducer';
 import { MinefieldType } from '@/app/play-now/game/types';
+import generateMinefield from '@/app/play-now/game/generateMinefield'
 
 export interface GameStateType {
   minefield: MinefieldType;
@@ -9,6 +10,7 @@ export interface GameStateType {
   rowSize: number;
   colSize: number;
   totalMines: number;
+  unopenedMines: number;
 }
 
 interface ContextValue {
@@ -17,19 +19,26 @@ interface ContextValue {
 }
 
 const initialState = {
-  minefield: [],
   gameStatus: 'on',
-  rowSize: 0,
-  colSize: 0,
-  totalMines: 0,
-
+  rowSize: 8,
+  colSize: 8,
+  totalMines: 8,
+  unopenedMines: 8
 };
+
+function initializer() {
+  const minefield = generateMinefield(initialState.rowSize, initialState.colSize, initialState.totalMines)
+  return {
+    ...initialState,
+    minefield
+  }
+}
 
 export const GameContext = createContext<ContextValue | undefined>(undefined);
 
 // Create a provider component
 export const GameProvider = ({ children }: any) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState, initializer);
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>

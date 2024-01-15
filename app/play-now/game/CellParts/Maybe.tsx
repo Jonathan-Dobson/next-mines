@@ -1,10 +1,10 @@
 import React from 'react'
 import Div from './Div'
-import { ClickTypes, CellPositionType } from '../types'
+import { CellPositionType } from '../types'
 import { GameContext } from '@/context/GameProvider';
 import { useContext } from 'react';
 
-type Props = ClickTypes & {
+type Props = {
   cellState?: string | number | undefined
   position?: CellPositionType
 }
@@ -13,8 +13,6 @@ const Maybe = (props: Props) => {
   const contextValue = useContext(GameContext)
   if (!contextValue) return (<div>contextValue is undefined</div>)
   const dispatch = contextValue.dispatch
-  const onClick = props?.onClick
-  const onRightClick = props?.onRightClick
 
   return (
     <Div Cell onRightClick={

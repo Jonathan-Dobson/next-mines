@@ -4,8 +4,7 @@ import Maybe from './Maybe';
 import Exploded from './Exploded';
 import Closed from './Closed';
 import Mine from './Mine';
-import { CellPositionType, CellStateType, GameStatusType } from '../types';
-
+import { CellPositionType, CellStateType } from '../types';
 
 type CellProps = {
   position: CellPositionType,
@@ -13,33 +12,30 @@ type CellProps = {
     cellState: CellStateType,
     hasMine: boolean,
   }
-  // gameStatus: GameStatusType,
 }
 
 function Cell(props: CellProps) {
-
+  const position = props.position
   if (typeof props?.cell?.cellState === 'number') return (
-    <Open cellState={props.cell.cellState} position={props.position} />
+    <Open cellState={props.cell.cellState} position={position} />
   )
 
   switch (props.cell.cellState) {
     case 'open':
-      return <Open position={props.position} />
+      return <Open position={position} />
     case 'flag':
-      return <Flag position={props.position} />
+      return <Flag position={position} />
     case 'maybe':
-      return <Maybe position={props.position} />
+      return <Maybe position={position} />
     case 'exploded':
-      return <Exploded position={props.position} />
+      return <Exploded position={position} />
     case 'closed':
-      return <Closed position={props.position} />
+      return <Closed position={position} />
     case 'mine':
       return <Mine />
     default:
-      return <Open cellState={props.cell.cellState} position={props.position} />
+      return <Open cellState={props.cell.cellState} position={position} />
   }
-
-
 }
 
 export default Cell

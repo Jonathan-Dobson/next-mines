@@ -1,8 +1,8 @@
 import React from 'react'
 import Div from './Div'
-import { ClickTypes, CellPositionType } from '../types'
+import { CellPositionType } from '../types'
 
-type Props = ClickTypes & {
+type Props = {
   cellState?: string | number | undefined
   position?: CellPositionType
 }

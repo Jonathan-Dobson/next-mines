@@ -9,7 +9,8 @@ export type ActionType = {
   'RIGHT_CLICKED_ON_FLAG_CELL' |
   'RIGHT_CLICKED_ON_MAYBE_CELL' |
   'RESET_GAME' |
-  'SET_GAME_STATUS',
+  'SET_GAME_STATUS' |
+  'CLOSE_MODAL'
   payload?: any
 }
 
@@ -33,9 +34,4 @@ export type GameStatusHookType = [GameStatusType, SetGameStatusType]
 export type CellPositionType = {
   rownum: number,
   colnum: number
-}
-
-export type ClickTypes = {
-  onClick?: () => void | undefined,
-  onRightClick?: () => string | void | undefined,
 }

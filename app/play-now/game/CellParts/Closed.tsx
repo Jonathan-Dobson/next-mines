@@ -1,13 +1,10 @@
 import React from 'react';
 import Div from './Div';
-import Mine from './Mine';
-import { ClickTypes, GameStatusType, CellPositionType } from '../types';
+import { CellPositionType } from '../types';
 import { GameContext } from '@/context/GameProvider';
 import { useContext } from 'react';
 
-type ClosedProps = ClickTypes & {
-  // gameStatus: GameStatusType,
-  // hasMine: boolean,
+type ClosedProps = {
   position: CellPositionType
 }
 
@@ -15,11 +12,6 @@ export default function Closed(props: ClosedProps) {
   const contextValue = useContext(GameContext)
   if (!contextValue) return (<div>contextValue is undefined</div>)
   const dispatch = contextValue.dispatch
-
-  // const gameStatus = props?.gameStatus || 'off'
-  // const onClick = gameStatus === 'lost' ? () => { } : props?.onClick
-  // const onRightClick = gameStatus === 'lost' ? () => { } : props?.onRightClick
-  // const hasMine = props?.hasMine
 
   return (
     <Div Cell onClick={() => dispatch({
@@ -35,10 +27,6 @@ export default function Closed(props: ClosedProps) {
         }
       })}
     >
-      {/* <Mine /> */}
     </Div>
-    // <Div Cell {...{ onClick, onRightClick }}>
-    //   {gameStatus === 'lost' && hasMine && <Mine />}
-    // </Div>
   )
 }

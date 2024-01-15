@@ -1,7 +1,7 @@
 import { ActionType } from '@/app/play-now/game/types';
 import generateMinefield from './generateMinefield'
 import getNeighbors from './getNeighbors';
-import { MinefieldType } from '@/components/game/types';
+import { MinefieldType } from '@/app/play-now/game/types';
 import { GameStateType } from '@/context/GameProvider';
 
 // minefield class with getter and setter
@@ -18,7 +18,6 @@ class Minefield {
     this._minefield = minefield
   }
 }
-
 
 function reducer(state: GameStateType, action: ActionType) {
   console.log('action', action);
@@ -67,27 +66,6 @@ function reducer(state: GameStateType, action: ActionType) {
         }
       })
     }
-    // queue.forEach((neighbor: any) => {
-    //   const [r, c] = neighbor
-    //   if (r >= 0 && r < minefield.minefield.length && c >= 0 && c < minefield.minefield[0].length) {
-
-    //     if (!minefield.minefield[r]?.[c]) {
-    //       console.log('no cell', r, c);
-    //       return
-    //     }
-    //     if (minefield.minefield[r][c].hasMine) {
-
-    //       mineCount++
-    //       console.log('increment minecount', mineCount);
-    //       return
-    //     }
-    //     if (mineCount === 0) {
-    //       console.log('mineCount', mineCount);
-    //       openIt(r, c)
-    //     }
-    //   }
-    // })
-
 
     minefield.minefield[row][col].cellState = mineCount
 
@@ -120,9 +98,6 @@ function reducer(state: GameStateType, action: ActionType) {
 
     return (
       allMinesAreFlagged && allNonMinesOpen && allFlagsHaveMines
-      // &&
-      // allMinesList.length === state.totalMines &&
-      // allNonMinesList.length === state.rowSize * state.colSize - state.totalMines
     )
   }
 
@@ -136,7 +111,8 @@ function reducer(state: GameStateType, action: ActionType) {
         minefield, gameStatus: 'on',
         rowSize: rows,
         colSize: columns,
-        totalMines: mines
+        totalMines: mines,
+        unopenedMines: mines
       }
     }
     case 'CLICKED_ON_CLOSED_CELL': {
@@ -168,7 +144,11 @@ function reducer(state: GameStateType, action: ActionType) {
         gameStatus = 'won'
       }
 
-      return { ...state, minefield: minefield.minefield, gameStatus }
+      const unopenedMines = minefield.minefield.flat()
+        .filter((cell: any) => cell.hasMine && cell.cellState === 'closed').length
+
+
+      return { ...state, minefield: minefield.minefield, gameStatus, unopenedMines }
     }
     case 'RIGHT_CLICKED_ON_CLOSED_CELL': {
       let gameStatus = state.gameStatus
@@ -186,7 +166,9 @@ function reducer(state: GameStateType, action: ActionType) {
       if (checkForWin(minefield)) {
         gameStatus = 'won'
       }
-      return { ...state, minefield, gameStatus }
+      const unopenedMines = minefield.flat()
+        .filter((cell: any) => cell.hasMine && cell.cellState === 'closed').length
+      return { ...state, minefield, gameStatus, unopenedMines }
     }
     case 'RIGHT_CLICKED_ON_FLAG_CELL': {
       let gameStatus = state.gameStatus
@@ -195,9 +177,12 @@ function reducer(state: GameStateType, action: ActionType) {
       const { rownum, colnum } = position
       const minefield = [...state.minefield]
       const cell = minefield[rownum][colnum]
-      cell.cellState = 'maybe'
+      if (!cell) return state
+      cell.cellState = 'maybe' || null
       minefield[rownum][colnum] = cell
-      return { ...state, minefield }
+      const unopenedMines = minefield.flat()
+        .filter((cell: any) => cell.hasMine && cell.cellState === 'closed').length
+      return { ...state, minefield, unopenedMines }
     }
     case 'RIGHT_CLICKED_ON_MAYBE_CELL': {
       let gameStatus = state.gameStatus
@@ -209,7 +194,9 @@ function reducer(state: GameStateType, action: ActionType) {
       if (!cell) return state
       cell.cellState = 'closed'
       minefield[rownum][colnum] = cell
-      return { ...state, minefield }
+      const unopenedMines = minefield.flat()
+        .filter((cell: any) => cell.hasMine && cell.cellState === 'closed').length
+      return { ...state, minefield, unopenedMines }
     }
     case 'CLICKED_ON_OPEN_CELL': {
       let gameStatus = state.gameStatus
@@ -248,8 +235,13 @@ function reducer(state: GameStateType, action: ActionType) {
       if (checkForWin(minefield)) {
         gameStatus = 'won'
       }
+      const unopenedMines = minefield.flat()
+        .filter((cell: any) => cell.hasMine && cell.cellState === 'closed').length
+      return { ...state, minefield, gameStatus, unopenedMines }
+    }
 
-      return { ...state, minefield, gameStatus }
+    case 'CLOSE_MODAL': {
+      return { ...state, gameStatus: 'off' }
     }
     default: {
       return state
