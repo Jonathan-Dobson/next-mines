@@ -5,7 +5,6 @@ function ControlPanel() {
   const [minefield, dispatch] = useReducer(reducer, [])
 
   function handleReset() {
-    console.log('dispatch reset game');
     dispatch({
       type: 'RESET_GAME',
       payload: {

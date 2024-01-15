@@ -18,11 +18,13 @@ type CellProps = {
 
 function Cell(props: CellProps) {
 
-  if (typeof props?.cell?.cellState === 'number') return <Open cellState={props.cell.cellState} />
+  if (typeof props?.cell?.cellState === 'number') return (
+    <Open cellState={props.cell.cellState} position={props.position} />
+  )
 
   switch (props.cell.cellState) {
     case 'open':
-      return <Open />
+      return <Open position={props.position} />
     case 'flag':
       return <Flag position={props.position} />
     case 'maybe':
@@ -34,7 +36,7 @@ function Cell(props: CellProps) {
     case 'mine':
       return <Mine />
     default:
-      return <Open cellState={props.cell.cellState} />
+      return <Open cellState={props.cell.cellState} position={props.position} />
   }
 
 

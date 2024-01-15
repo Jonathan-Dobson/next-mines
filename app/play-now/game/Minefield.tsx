@@ -6,15 +6,23 @@ import { GameContext } from '@/context/GameProvider'
 export default function Minefield() {
   const contextValue = useContext(GameContext)
   if (!contextValue) return (<div>contextValue is undefined</div>)
-  console.log(contextValue.state)
   const state = contextValue.state
   const dispatch = contextValue.dispatch
 
   const minefield = state?.minefield || []
 
+  console.log(state?.gameStatus);
+
   return (<div>
 
-    <button onClick={() => dispatch({ type: 'RESET_GAME', payload: { rows: 4, columns: 4, mines: 3 } })}>Reset</button>
+    <button onClick={() => dispatch({
+      type: 'RESET_GAME',
+      payload: {
+        rows: 5,
+        columns: 5,
+        mines: 3
+      }
+    })}>Reset</button>
 
     <div style={{
       display: 'grid',
@@ -22,17 +30,19 @@ export default function Minefield() {
       gridTemplateColumns: `repeat(${minefield.length}, 50px)`,
       gridTemplateRows: `repeat(${minefield.length}, 50px)`
     }}>
-      {minefield
-        .map((row: MinefieldRowType, rownum: number) => {
-          return row.map((cell: any, colnum: number) => {
-            return <Cell key={`${rownum.toString()}-${colnum.toString()}`}
-              position={{ colnum, rownum }}
-              cell={cell}
-            />
+
+      {!minefield || minefield.length === 0 ? 'no minefield' :
+        minefield
+          .map((row: MinefieldRowType, rownum: number) => {
+            return row.map((cell: any, colnum: number) => {
+              return <Cell key={`${rownum.toString()}-${colnum.toString()}`}
+                position={{ colnum, rownum }}
+                cell={cell}
+              />
+            }
+            )
           }
           )
-        }
-        )
       }
     </div>
   </div>

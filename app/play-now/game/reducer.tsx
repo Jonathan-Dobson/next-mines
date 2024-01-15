@@ -1,6 +1,8 @@
 import { ActionType } from '@/app/play-now/game/types';
 import generateMinefield from './generateMinefield'
 import getNeighbors from './getNeighbors';
+import { MinefieldType } from '@/components/game/types';
+import { GameStateType } from '@/context/GameProvider';
 
 // minefield class with getter and setter
 
@@ -18,30 +20,26 @@ class Minefield {
 }
 
 
-function reducer(state: any, action: ActionType) {
+function reducer(state: GameStateType, action: ActionType) {
   console.log('action', action);
   var minefield = new Minefield(state.minefield)
 
   function openIt(row: number, col: number) {
-    console.count('openIt count')
-    console.log('opening', row, col);
     if (minefield.minefield[row][col].hasMine) return
     if (minefield.minefield[row][col].cellState !== 'closed') return
 
     minefield.minefield[row][col].cellState = 'open'
     const neighbors = getNeighbors(row, col)
-    let mineCount = 0
 
     // build a queue of neighbors to open in an array, then open them all at once in a loop
     let queue = [[]]
+
     neighbors.forEach((neighbor: any) => {
       const [r, c] = neighbor
       if (!minefield.minefield[r]) {
-        console.log('no cell', r, c);
         return
       }
       if (!minefield.minefield[r][c]) {
-        console.log('no cell', r, c);
         return
       }
       if (r >= 0 && r < minefield.minefield.length && c >= 0 && c < minefield.minefield[0].length) {
@@ -50,36 +48,96 @@ function reducer(state: any, action: ActionType) {
         }
       }
     })
-    console.log(`cell ${row} ${col} has ${queue.length} neighbors to open`);
-    queue.forEach((neighbor: any) => {
+
+    const mineCount = neighbors.reduce((acc: number, neighbor: any) => {
       const [r, c] = neighbor
       if (r >= 0 && r < minefield.minefield.length && c >= 0 && c < minefield.minefield[0].length) {
-
-        if (!minefield.minefield[r]?.[c]) {
-          console.log('no cell', r, c);
-          return
-        }
         if (minefield.minefield[r][c].hasMine) {
-          mineCount++
+          acc++
         }
-        openIt(r, c)
       }
-    })
+      return acc
+    }, 0)
+
+    if (mineCount === 0) {
+      queue.forEach((neighbor: any) => {
+        const [r, c] = neighbor
+        if (r >= 0 && r < minefield.minefield.length && c >= 0 && c < minefield.minefield[0].length) {
+          openIt(r, c)
+        }
+      })
+    }
+    // queue.forEach((neighbor: any) => {
+    //   const [r, c] = neighbor
+    //   if (r >= 0 && r < minefield.minefield.length && c >= 0 && c < minefield.minefield[0].length) {
+
+    //     if (!minefield.minefield[r]?.[c]) {
+    //       console.log('no cell', r, c);
+    //       return
+    //     }
+    //     if (minefield.minefield[r][c].hasMine) {
+
+    //       mineCount++
+    //       console.log('increment minecount', mineCount);
+    //       return
+    //     }
+    //     if (mineCount === 0) {
+    //       console.log('mineCount', mineCount);
+    //       openIt(r, c)
+    //     }
+    //   }
+    // })
 
 
-    if (mineCount > 0) {
-      minefield.minefield[row][col].cellState = mineCount
-    }
-    else {
-      minefield.minefield[row][col].cellState = 'open'
-    }
+    minefield.minefield[row][col].cellState = mineCount
+
+  }
+
+  function checkForWin(minefield: MinefieldType): boolean {
+    const allMinesList = minefield.flat()
+      .filter((cell: any) => cell.hasMine)
+
+    const allMinesAreFlagged = allMinesList
+      .every((cell: any) => cell.cellState === 'flag')
+
+    const allFlags = minefield.flat()
+      .filter((cell: any) => cell.cellState === 'flag')
+
+    const allFlagsHaveMines = allFlags
+      .every((cell: any) => cell.hasMine)
+
+    const allNonMinesList = minefield.flat()
+      .filter((cell: any) => !cell.hasMine)
+
+    const allNonMinesOpen = allNonMinesList
+      .every((cell: any) => cell.cellState !== 'closed')
+
+    console.log('allMinesAreFlagged', allMinesAreFlagged);
+    console.log('allNonMinesOpen', allNonMinesOpen);
+    console.log('allFlagsHaveMines', allFlagsHaveMines);
+
+    console.log(allMinesAreFlagged && allNonMinesOpen && allFlagsHaveMines)
+
+    return (
+      allMinesAreFlagged && allNonMinesOpen && allFlagsHaveMines
+      // &&
+      // allMinesList.length === state.totalMines &&
+      // allNonMinesList.length === state.rowSize * state.colSize - state.totalMines
+    )
   }
 
   switch (action.type) {
     case 'RESET_GAME': {
       const { rows, columns, mines } = action.payload
       const minefield = generateMinefield(rows, columns, mines)
-      return { ...state, minefield, gameStatus: 'on' }
+
+      return {
+        ...state,
+        minefield, gameStatus: 'on',
+        rowSize: rows,
+        colSize: columns,
+        totalMines: mines
+      }
     }
     case 'CLICKED_ON_CLOSED_CELL': {
       let gameStatus = state.gameStatus
@@ -106,14 +164,7 @@ function reducer(state: any, action: ActionType) {
 
       openIt(rownum, colnum)
 
-      // check if game is won
-      let closedCells = 0
-      minefield.minefield.forEach((row: any) => {
-        row.forEach((cell: any) => {
-          if (minefield.minefield[rownum][colnum].cellState === 'closed') closedCells++
-        })
-      })
-      if (closedCells === state.mines) {
+      if (checkForWin(minefield.minefield)) {
         gameStatus = 'won'
       }
 
@@ -121,14 +172,21 @@ function reducer(state: any, action: ActionType) {
     }
     case 'RIGHT_CLICKED_ON_CLOSED_CELL': {
       let gameStatus = state.gameStatus
-      if (gameStatus !== 'on') return state
+      if (gameStatus === 'off') return state
+      const minefield = state.minefield
+      if (!minefield) return state
       const { position } = action.payload
       const { rownum, colnum } = position
-      const minefield = [...state.minefield]
-      const cell = minefield[rownum][colnum]
+      if (!minefield[rownum]) return state
+      if (!minefield[rownum][colnum]) return state
+      let cell = minefield[rownum][colnum]
+      if (!cell) return state
       cell.cellState = 'flag'
       minefield[rownum][colnum] = cell
-      return { ...state, minefield }
+      if (checkForWin(minefield)) {
+        gameStatus = 'won'
+      }
+      return { ...state, minefield, gameStatus }
     }
     case 'RIGHT_CLICKED_ON_FLAG_CELL': {
       let gameStatus = state.gameStatus
@@ -148,9 +206,50 @@ function reducer(state: any, action: ActionType) {
       const { rownum, colnum } = position
       const minefield = [...state.minefield]
       const cell = minefield[rownum][colnum]
+      if (!cell) return state
       cell.cellState = 'closed'
       minefield[rownum][colnum] = cell
       return { ...state, minefield }
+    }
+    case 'CLICKED_ON_OPEN_CELL': {
+      let gameStatus = state.gameStatus
+      if (gameStatus !== 'on') return state
+      const { position } = action.payload
+      const { rownum, colnum } = position
+      const minefield = [...state.minefield]
+      const cell = minefield[rownum][colnum]
+
+      const neighbors = getNeighbors(rownum, colnum)
+      let flaggedNeighbors = 0
+      neighbors.forEach((neighbor: any) => {
+        const [r, c] = neighbor
+        if (neighbors.length === 0) return
+        if (r >= 0 && r < minefield.length && c >= 0 && c < minefield[0].length) {
+          if (minefield[r][c]?.cellState === 'flag') {
+            flaggedNeighbors++
+          }
+        }
+      })
+      if (flaggedNeighbors !== cell?.cellState) return state
+
+      neighbors.forEach((neighbor: any) => {
+        const [r, c] = neighbor
+        if (r >= 0 && r < minefield.length && c >= 0 && c < minefield[0].length) {
+
+          if (minefield[r][c]?.cellState === 'closed') {
+            openIt(r, c)
+          }
+        }
+
+      })
+
+      minefield[rownum][colnum] = cell
+
+      if (checkForWin(minefield)) {
+        gameStatus = 'won'
+      }
+
+      return { ...state, minefield, gameStatus }
     }
     default: {
       return state

@@ -2,7 +2,9 @@ import { Dispatch, SetStateAction } from 'react';
 import Minefield from './Minefield';
 
 export type ActionType = {
-  type: 'CLICKED_ON_CLOSED_CELL' |
+  type:
+  'CLICKED_ON_OPEN_CELL' |
+  'CLICKED_ON_CLOSED_CELL' |
   'RIGHT_CLICKED_ON_CLOSED_CELL' |
   'RIGHT_CLICKED_ON_FLAG_CELL' |
   'RIGHT_CLICKED_ON_MAYBE_CELL' |
