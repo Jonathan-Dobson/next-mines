@@ -14,6 +14,15 @@ export type ActionType = {
   payload?: any
 }
 
+export interface GameStateType {
+  minefield: MinefieldType;
+  gameStatus: GameStatusType;
+  rowSize: number;
+  colSize: number;
+  totalMines: number;
+  unopenedMines: number;
+}
+
 export type UseStateType<T> = Dispatch<SetStateAction<T>>
 export type UseReducerType<T> = [T, Dispatch<SetStateAction<T>>]
 
@@ -22,7 +31,7 @@ export type CellType = {
   hasMine: boolean,
   cellState?: CellStateType
 }
-export type MinefieldRowType = CellType[] | null[]
+export type MinefieldRowType = CellType[]
 export type MinefieldType = MinefieldRowType[]
 export type SetMinefieldType = UseStateType<MinefieldType>;
 export type MinefieldHookType = [MinefieldType, SetMinefieldType]
@@ -34,4 +43,10 @@ export type GameStatusHookType = [GameStatusType, SetGameStatusType]
 export type CellPositionType = {
   rownum: number,
   colnum: number
+}
+
+export type ResetGamePayloadType = {
+  rowSize: number,
+  colSize: number,
+  totalMines: number
 }

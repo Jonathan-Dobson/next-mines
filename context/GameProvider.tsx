@@ -1,24 +1,16 @@
 'use client'
 import { createContext, useReducer } from 'react';
 import reducer from '@/app/play-now/game/reducer';
-import { MinefieldType } from '@/app/play-now/game/types';
+import { GameStateType } from '@/app/play-now/game/types';
 import generateMinefield from '@/app/play-now/game/generateMinefield'
-
-export interface GameStateType {
-  minefield: MinefieldType;
-  gameStatus: string;
-  rowSize: number;
-  colSize: number;
-  totalMines: number;
-  unopenedMines: number;
-}
 
 interface ContextValue {
   state: GameStateType | undefined;
   dispatch: React.Dispatch<any>; // Replace any with the actual action type
 }
 
-const initialState = {
+const initialState: GameStateType = {
+  minefield: [],
   gameStatus: 'on',
   rowSize: 8,
   colSize: 8,

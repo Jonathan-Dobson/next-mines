@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import Cell from './CellParts/Cell'
-import { MinefieldRowType } from './types'
+import { MinefieldRowType, ActionType, ResetGamePayloadType } from './types'
 import { GameContext } from '@/context/GameProvider'
 import Div from './CellParts/Div'
 
@@ -8,7 +8,7 @@ export default function Minefield() {
   const contextValue = useContext(GameContext)
   if (!contextValue) return (<div>contextValue is undefined</div>)
   const state = contextValue.state
-  const dispatch = contextValue.dispatch
+  const dispatch: React.Dispatch<ActionType> = contextValue.dispatch
   const minefield = state?.minefield || []
   const totalMines = state?.totalMines || 0
 
