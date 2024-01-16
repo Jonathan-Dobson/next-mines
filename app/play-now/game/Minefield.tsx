@@ -3,7 +3,6 @@ import Cell from './CellParts/Cell'
 import { MinefieldRowType } from './types'
 import { GameContext } from '@/context/GameProvider'
 import Div from './CellParts/Div'
-import { Play } from 'next/font/google'
 
 export default function Minefield() {
   const contextValue = useContext(GameContext)
@@ -11,6 +10,7 @@ export default function Minefield() {
   const state = contextValue.state
   const dispatch = contextValue.dispatch
   const minefield = state?.minefield || []
+  const totalMines = state?.totalMines || 0
 
   const PlayAgainButton = () => {
     return (
@@ -26,6 +26,11 @@ export default function Minefield() {
       </button>
     )
   }
+
+  const flaggedTiles = minefield.flat()
+    .filter((cell: any) => cell.cellState === 'flag').length || 0
+
+  const minesToFlag = totalMines - flaggedTiles
 
   return (<div>
 
@@ -44,7 +49,7 @@ export default function Minefield() {
         }
         {state?.gameStatus === 'won' &&
           <>
-            <Div GameOverText>Congratulations! You Won!<br />All mines have been correctly flagged.
+            <Div GameOverText style={{ color: 'green' }}>Congratulations! You Won!<br />All mines have been correctly flagged.
               <div>
 
                 <button onClick={() => dispatch({
@@ -65,20 +70,12 @@ export default function Minefield() {
 
     <PlayAgainButton />
 
-    {/* <button onClick={() => dispatch({
-      type: 'RESET_GAME',
-      payload: {
-        rows: 8,
-        columns: 8,
-        mines: 8
-      }
-    })}>
-      {state?.gameStatus === 'on' ? 'Reset' : 'Play Again'}
-    </button> */}
-
 
     <div>
-      <p>{state?.unopenedMines}</p>
+      <p style={{ color: 'pink', fontSize: '20pt' }}>
+        {
+          minesToFlag <= 0 ? 'All flagged' : minesToFlag + ' left to flag'
+        }</p>
     </div>
 
     <div style={{
