@@ -106,19 +106,19 @@ function reducer(state: GameStateType, action: ActionType): GameStateType {
         return { ...state, minefield, gameStatus, endTime }
       }
       openIt(rownum, colnum)
-      // if (checkForWin()) {
-      //   gameStatus = 'won'
-      //   endTime = Date.now()
-      // }
+      if (checkForWin()) {
+        gameStatus = 'won'
+        endTime = Date.now()
+      }
       return { ...state, minefield, gameStatus, unopenedMines, endTime }
     }
 
     case 'RIGHT_CLICKED_ON_CLOSED_CELL': {
       minefield[rownum][colnum].cellState = 'flag'
-      // if (checkForWin()) {
-      //   gameStatus = 'won'
-      //   endTime = Date.now()
-      // }
+      if (checkForWin()) {
+        gameStatus = 'won'
+        endTime = Date.now()
+      }
       return { ...state, minefield, gameStatus, unopenedMines, endTime }
     }
 
@@ -146,10 +146,10 @@ function reducer(state: GameStateType, action: ActionType): GameStateType {
           openIt(r, c)
         }
       })
-      // if (checkForWin()) {
-      //   gameStatus = 'won'
-      //   endTime = Date.now()
-      // }
+      if (checkForWin()) {
+        gameStatus = 'won'
+        endTime = Date.now()
+      }
       return { ...state, minefield, gameStatus, unopenedMines, endTime }
     }
   }

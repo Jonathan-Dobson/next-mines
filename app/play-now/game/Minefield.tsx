@@ -4,7 +4,6 @@ import Cell from './CellParts/Cell'
 import { MinefieldRowType, ActionType } from './types'
 import { GameContext } from '@/context/GameProvider'
 import Div from './CellParts/Div'
-import Timer from './Timer'
 import { time } from 'console'
 
 const colors = {
@@ -43,7 +42,7 @@ export default function Minefield() {
         payload: {
           rows: 8,
           columns: 8,
-          mines: 4,
+          mines: 10,
           time: Date.now()
         }
       })}>
@@ -57,7 +56,10 @@ export default function Minefield() {
 
   const minesToFlag = totalMines - flaggedTiles
 
-  return (<div>
+  return (<div style={{
+    display: 'flex',
+    flexDirection: 'column',
+  }}>
 
     <Div >
       <Div GameOver>
@@ -98,13 +100,13 @@ export default function Minefield() {
 
 
     <div>
-      <p style={{ color: colors[state.gameStatus], fontSize: '20pt' }}>
+      <p style={{ color: colors[state.gameStatus], fontSize: '16pt' }}>
         {
-          minesToFlag <= 0 ? 'All flagged. ' : minesToFlag + ' left to flag. '
+          minesToFlag <= 0 ? 'All flagged. ' : minesToFlag + ' more to flag. '
         }
         {gameStatus === 'off' && 'Game Over'}
         {gameStatus === 'lost' && 'Game Over'}
-        {gameStatus === 'won' && 'Congratulations! You Win!'}
+        {gameStatus === 'won' && 'You Win!'}
       </p>
     </div>
 
