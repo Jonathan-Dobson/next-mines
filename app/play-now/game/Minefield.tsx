@@ -4,10 +4,19 @@ import { MinefieldRowType, ActionType, ResetGamePayloadType } from './types'
 import { GameContext } from '@/context/GameProvider'
 import Div from './CellParts/Div'
 
+const colors = {
+  'on': 'pink',
+  'off': 'red',
+  'lost': 'red',
+  'won': 'green'
+}
+
 export default function Minefield() {
   const contextValue = useContext(GameContext)
   if (!contextValue) return (<div>contextValue is undefined</div>)
   const state = contextValue.state
+  if (!state) return (<div>state is undefined</div>)
+  const gameStatus = state.gameStatus
   const dispatch: React.Dispatch<ActionType> = contextValue.dispatch
   const minefield = state?.minefield || []
   const totalMines = state?.totalMines || 0
@@ -22,7 +31,7 @@ export default function Minefield() {
           mines: 8
         }
       })}>
-        {state?.gameStatus === 'on' ? 'Reset' : 'Play Again'}
+        {gameStatus === 'on' ? 'Reset' : 'Play Again'}
       </button>
     )
   }
@@ -36,18 +45,19 @@ export default function Minefield() {
 
     <Div >
       <Div GameOver>
-        {state?.gameStatus === 'lost' &&
+        {gameStatus === 'lost' &&
           <>
-            <Div GameOverText>Ouch! You hit a mine!<br />Game Over <br />     <button onClick={() => dispatch({
-              type: 'CLOSE_MODAL',
-            })}>
-              OK
-            </button>
+            <Div GameOverText>Ouch! You hit a mine!<br />Game Over <br />
+              <button onClick={() => dispatch({
+                type: 'CLOSE_MODAL',
+              })}>
+                OK
+              </button>
               <PlayAgainButton />
             </Div>
           </>
         }
-        {state?.gameStatus === 'won' &&
+        {/* {gameStatus === 'won' &&
           <>
             <Div GameOverText style={{ color: 'green' }}>Congratulations! You Won!<br />All mines have been correctly flagged.
               <div>
@@ -64,7 +74,7 @@ export default function Minefield() {
               </div>
             </Div>
 
-          </>}
+          </>} */}
       </Div>
     </Div>
 
@@ -72,17 +82,23 @@ export default function Minefield() {
 
 
     <div>
-      <p style={{ color: 'pink', fontSize: '20pt' }}>
+      <p style={{ color: colors[state.gameStatus], fontSize: '20pt' }}>
         {
-          minesToFlag <= 0 ? 'All flagged' : minesToFlag + ' left to flag'
-        }</p>
+          minesToFlag <= 0 ? 'All flagged. ' : minesToFlag + ' left to flag. '
+        }
+        {gameStatus === 'off' && 'Game Over'}
+        {gameStatus === 'lost' && 'Game Over'}
+        {gameStatus === 'won' && 'Congratulations! You Win!'}
+      </p>
     </div>
 
     <div style={{
       display: 'grid',
       gridGap: 2,
       gridTemplateColumns: `repeat(${minefield.length}, 50px)`,
-      gridTemplateRows: `repeat(${minefield.length}, 50px)`
+      gridTemplateRows: `repeat(${minefield.length}, 50px)`,
+      backgroundColor: colors[gameStatus],
+      border: `6px solid ${colors[gameStatus]}`
     }}>
 
       {!minefield || minefield.length === 0 ? 'no minefield' :
