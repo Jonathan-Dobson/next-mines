@@ -1,5 +1,5 @@
 import Div from './Div';
-import { ClickTypes, CellPositionType } from '../types';
+import { CellPositionType } from '../types';
 import { GameContext } from '@/context/GameProvider';
 import { useContext } from 'react';
 
