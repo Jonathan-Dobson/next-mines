@@ -14,7 +14,7 @@ const initialState: GameStateType = {
   gameStatus: 'on',
   rowSize: 8,
   colSize: 8,
-  totalMines: 8,
+  totalMines: 10,
   unopenedMines: 8,
   startTime: Date.now(),
   endTime: 0,
