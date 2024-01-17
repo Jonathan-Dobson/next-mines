@@ -11,17 +11,33 @@ function reducer(state: GameStateType, action: ActionType): GameStateType {
   const size: [number, number] = [state.rowSize, state.colSize]
   const rownum = action.payload?.position?.rownum
   const colnum = action.payload?.position?.colnum
+  let endTime = state.endTime
+
+
 
   if (action.type === 'RESET_GAME') {
-    const { rows, columns, mines } = action.payload
+    const { rows, columns, mines, time } = action.payload
     const minefield = generateMinefield(rows, columns, mines)
     return {
       ...state,
-      minefield, gameStatus: 'on',
+      minefield,
+      gameStatus: 'on',
       rowSize: rows,
       colSize: columns,
       totalMines: mines,
-      unopenedMines: mines
+      unopenedMines: mines,
+      startTime: time,
+      endTime: 0,
+    }
+  }
+  if (action.type === 'INCREMENT_TIMER') {
+    if (checkForWin()) {
+      gameStatus = 'won'
+    }
+    return {
+      ...state,
+      gameStatus,
+      endTime: Date.now()
     }
   }
   if (action.type === 'CLOSE_MODAL') {
@@ -69,13 +85,14 @@ function reducer(state: GameStateType, action: ActionType): GameStateType {
   }
 
   if (gameStatus !== 'on') return state
-
+  state.endTime = Date.now()
   switch (action.type) {
 
     case 'CLICKED_ON_CLOSED_CELL': {
       if (typeof rownum !== 'number' || typeof colnum !== 'number') return state
       if (minefield[rownum][colnum].hasMine) {
         gameStatus = 'lost'
+        endTime = Date.now()
         minefield = minefield.map((row: MinefieldRowType) => {
           if (!row.length) return []
           return row.map((value: CellType) => {
@@ -86,17 +103,23 @@ function reducer(state: GameStateType, action: ActionType): GameStateType {
           })
         })
         minefield[rownum][colnum].cellState = 'exploded'
-        return { ...state, minefield, gameStatus }
+        return { ...state, minefield, gameStatus, endTime }
       }
       openIt(rownum, colnum)
-      if (checkForWin()) gameStatus = 'won'
-      return { ...state, minefield, gameStatus, unopenedMines }
+      // if (checkForWin()) {
+      //   gameStatus = 'won'
+      //   endTime = Date.now()
+      // }
+      return { ...state, minefield, gameStatus, unopenedMines, endTime }
     }
 
     case 'RIGHT_CLICKED_ON_CLOSED_CELL': {
       minefield[rownum][colnum].cellState = 'flag'
-      if (checkForWin()) gameStatus = 'won'
-      return { ...state, minefield, gameStatus, unopenedMines }
+      // if (checkForWin()) {
+      //   gameStatus = 'won'
+      //   endTime = Date.now()
+      // }
+      return { ...state, minefield, gameStatus, unopenedMines, endTime }
     }
 
     case 'RIGHT_CLICKED_ON_FLAG_CELL': {
@@ -123,8 +146,11 @@ function reducer(state: GameStateType, action: ActionType): GameStateType {
           openIt(r, c)
         }
       })
-      if (checkForWin()) gameStatus = 'won'
-      return { ...state, minefield, gameStatus, unopenedMines }
+      // if (checkForWin()) {
+      //   gameStatus = 'won'
+      //   endTime = Date.now()
+      // }
+      return { ...state, minefield, gameStatus, unopenedMines, endTime }
     }
   }
   unopenedMines = minefield.flat()

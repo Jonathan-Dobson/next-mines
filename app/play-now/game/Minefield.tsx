@@ -1,8 +1,11 @@
-import React, { useContext } from 'react'
+'use client'
+import React, { use, useContext, useEffect } from 'react'
 import Cell from './CellParts/Cell'
-import { MinefieldRowType, ActionType, ResetGamePayloadType } from './types'
+import { MinefieldRowType, ActionType } from './types'
 import { GameContext } from '@/context/GameProvider'
 import Div from './CellParts/Div'
+import Timer from './Timer'
+import { time } from 'console'
 
 const colors = {
   'on': 'pink',
@@ -13,6 +16,16 @@ const colors = {
 
 export default function Minefield() {
   const contextValue = useContext(GameContext)
+  useEffect(() => {
+    if (contextValue?.state?.gameStatus === 'on') {
+      const interval = setInterval(() => {
+        contextValue.dispatch({
+          type: 'INCREMENT_TIMER',
+        })
+      }, 500)
+      return () => clearInterval(interval)
+    }
+  }, [contextValue])
   if (!contextValue) return (<div>contextValue is undefined</div>)
   const state = contextValue.state
   if (!state) return (<div>state is undefined</div>)
@@ -21,6 +34,8 @@ export default function Minefield() {
   const minefield = state?.minefield || []
   const totalMines = state?.totalMines || 0
 
+
+
   const PlayAgainButton = () => {
     return (
       <button onClick={() => dispatch({
@@ -28,7 +43,8 @@ export default function Minefield() {
         payload: {
           rows: 8,
           columns: 8,
-          mines: 8
+          mines: 4,
+          time: Date.now()
         }
       })}>
         {gameStatus === 'on' ? 'Reset' : 'Play Again'}
@@ -114,6 +130,13 @@ export default function Minefield() {
           }
           )
       }
+    </div>
+    <div>
+      Time {
+        state.startTime && state.endTime && state.endTime > state.startTime &&
+        <span>{((state.endTime - state.startTime) / 1000).toFixed(0)}</span>
+      }
+
     </div>
   </div>
   )

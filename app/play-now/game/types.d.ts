@@ -10,7 +10,8 @@ export type ActionType = {
   'RIGHT_CLICKED_ON_MAYBE_CELL' |
   'RESET_GAME' |
   'SET_GAME_STATUS' |
-  'CLOSE_MODAL'
+  'CLOSE_MODAL' |
+  'INCREMENT_TIMER'
   payload?: any
 }
 
@@ -21,6 +22,8 @@ export interface GameStateType {
   colSize: number;
   totalMines: number;
   unopenedMines: number;
+  startTime: number;
+  endTime: number;
 }
 
 export type UseStateType<T> = Dispatch<SetStateAction<T>>
