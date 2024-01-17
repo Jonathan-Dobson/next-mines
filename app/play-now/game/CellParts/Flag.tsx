@@ -1,6 +1,6 @@
 import React from 'react'
 import Div from './Div'
-import { CellPositionType } from '@/components/game/types'
+import { CellPositionType } from '@/app/play-now/game/types'
 import { GameContext } from '@/context/GameProvider';
 import { useContext } from 'react';
 
