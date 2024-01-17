@@ -32,42 +32,21 @@ function reducer(state: GameStateType, action: ActionType): GameStateType {
   }
 
   function openIt(row: number, col: number) {
-    if (minefield[row][col].hasMine) return
-    if (minefield[row][col].cellState !== 'closed') return
-
     minefield[row][col].cellState = 'open'
     const neighbors = getNeighbors(row, col, max)
-
     let queue: [number | undefined, number | undefined][] = []
 
-    neighbors.forEach(([r, c]: [number, number]) => {
-      if (!minefield[r]) {
-        return
-      }
-      if (!minefield[r][c]) {
-        return
-      }
-      if (minefield[r][c].cellState === 'closed') {
-        queue.push([r, c])
-      }
-    })
-
-    // Only open the cell if it has no mines around it
-    const mineCount = neighbors.reduce((acc: number, [r, c]: [number, number]) => {
-      if (minefield[r][c].hasMine) {
-        acc++
-      }
-      return acc
+    minefield[row][col].cellState = neighbors.reduce((acc: number, [r, c]: [number, number]) => {
+      if (minefield[r][c].cellState === 'closed') queue.push([r, c])
+      return minefield[r][c].hasMine ? acc + 1 : acc
     }, 0)
 
-    if (mineCount === 0) {
-      if (queue && queue.length === 0) return
+    if (minefield[row][col].cellState === 0 && queue && queue.length > 0) {
       queue.forEach(([r, c]: [number | undefined, number | undefined]) => {
-        if (typeof r !== 'number' || typeof c !== 'number') return
+        if (typeof r === 'undefined' || typeof c === 'undefined') return
         openIt(r, c)
       })
     }
-    minefield[row][col].cellState = mineCount
   }
 
   function checkForWin(): boolean {
@@ -114,11 +93,11 @@ function reducer(state: GameStateType, action: ActionType): GameStateType {
           })
         })
         minefield[rownum][colnum].cellState = 'exploded'
-        return { ...state, minefield: minefield, gameStatus }
+        return { ...state, minefield, gameStatus }
       }
       openIt(rownum, colnum)
       if (checkForWin()) gameStatus = 'won'
-      return { ...state, minefield: minefield, gameStatus, unopenedMines }
+      return { ...state, minefield, gameStatus, unopenedMines }
     }
 
     case 'RIGHT_CLICKED_ON_CLOSED_CELL': {
