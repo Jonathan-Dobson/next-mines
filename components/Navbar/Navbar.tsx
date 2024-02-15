@@ -6,16 +6,12 @@ import { ImSpinner } from "react-icons/im";
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
-
 export default function Navbar() {
   const [loading, setLoading] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
-
     return () => setLoading(false)
-
-
   }, [pathname])
 
   return (
