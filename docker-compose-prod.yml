@@ -1,0 +1,20 @@
+services:
+  mines:
+    image: localhost:5000/mines:latest
+    #    deploy:
+    #      replicas: 1
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.mines.rule: "Host(`mines.jonathandobson.com`)"
+      traefik.http.routers.mines.entrypoints: "websecure"
+      traefik.http.routers.mines.tls.certresolver: "cfresolver"
+    networks:
+      - traefik_public
+    environment:
+      DATABASE: "postgresql://JonathanDobson:Tlb3kUT3Q1Z1VLTiecdP09S@db:5432/mines?schema=public&connect_timeout=300"
+#    env_file:
+#      - .env
+
+networks:
+  traefik_public:
+    external: true
