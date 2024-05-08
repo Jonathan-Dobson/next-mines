@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+  output: "standalone",
   // avatars.githubusercontent.com
   images: {
     remotePatterns: [

@@ -14,15 +14,15 @@ FROM install as build
 COPY src/ .
 RUN npx prisma generate
 RUN npx prisma migrate deploy
-RUN npm run build
+RUN npx --max-old-space-size=4096 next build
 
-#FROM base as run
+FROM base as run
 
 WORKDIR /app
 ENV NODE_ENV=production
 
-#COPY --from=build app/.next/standalone .
-#COPY --from=build app/.next/static .next/static
+COPY --from=build app/.next/standalone .
+COPY --from=build app/.next/static .next/static
 
 EXPOSE 80
 
